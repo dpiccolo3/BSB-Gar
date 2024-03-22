@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<project name="BSB-GAR" default="dist">
+    <description>BSB-GAR</description>
+
+	<property file="build.properties" /> 
+	
+	<property name="project.name" value="BSB-Gar"/>
+	<property name="project.file.name" value="BSB-GAR"/>
+	<property name="project.base.dir" location="${project.general.base.dir}${project.name}"/>
+	<property name="project.dist.dir" location="${project.base.dir}/${project.general.dist.dir}"/>
+	<property name="project.build.dir" location="${project.base.dir}/${project.general.build.dir}"/>
+	<property name="project.src.dir" location="${project.base.dir}/${project.general.src.dir}" />
+	<property name="artifactsDir" value="${project.ear.dist.dir}"/>
+	
+	<target name="clean">
+		<delete dir="${project.build.dir}" />
+		<delete dir="${project.dist.dir}" />
+	</target>
+	
+	<target name="init" depends="clean">
+		<mkdir dir="${project.build.dir}" />
+		<mkdir dir="${project.dist.dir}" />
+	</target>
+	
+	<target name="makeJar" depends="init">
+		<delete dir="${project.dist.dir}" defaultexcludes="true">
+			<include name="${project.name}*" />
+		</delete>
+		<jar destfile="${project.ear.build.dir}/${project.file.name}${project.general.extension.gar}" 
+			 basedir="${project.src.dir}">
+			<include name="**/*" />
+			<exclude name="**/CVS/**"/>
+			<exclude name="**/empty"/>
+		</jar>
+		<copy file="${project.ear.build.dir}/${project.file.name}${project.general.extension.gar}" todir="${project.ear.dist.dir}" />
+	</target>
+	
+	<target name="dist">
+		<antcall target="makeJar"/>
+	</target>
+	
+</project>

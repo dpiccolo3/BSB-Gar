@@ -1,0 +1,49 @@
+<cache-config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xmlns="http://xmlns.oracle.com/coherence/coherence-cache-config"
+              xsi:schemaLocation="http://xmlns.oracle.com/coherence/coherence-cache-config
+              					  http://xmlns.oracle.com/coherence/coherence-cache-config/1.2/coherence-cache-config.xsd">
+	<caching-scheme-mapping>
+		<cache-mapping>
+			<cache-name>*</cache-name>
+			<scheme-name>SampleDistributedScheme</scheme-name>
+			<init-params>
+				<init-param>
+					<param-name>front-size-limit</param-name>
+					<param-value>1000</param-value>
+				</init-param>
+				<init-param>
+					<param-name>back-size-limit</param-name>
+					<param-value>250M</param-value>
+				</init-param>
+			</init-params>			
+		</cache-mapping>
+	</caching-scheme-mapping>
+	<caching-schemes>
+		<distributed-scheme>
+			<!-- Dettaglio dello schema distribuito che fa da back end -->
+			<scheme-name>SampleDistributedScheme</scheme-name>
+			<service-name>SampleDistributedCache</service-name>
+			<!-- enable the DefaultSerializer when using ExternalizableLite -->
+			<!--serializer> <instance> <class-name>com.tangosol.io.DefaultSerializer</class-name> 
+				</instance> </serializer -->
+			<!-- Indica il luogo dove sono salvati i dati in questo caso su parla di local cache -->
+			<backing-map-scheme>
+				<local-scheme>
+					<!-- Indica che la configurazione della local cache-->
+					<scheme-ref>sample-backing-map</scheme-ref>
+				</local-scheme>
+			</backing-map-scheme>
+			<autostart>true</autostart>
+		</distributed-scheme>
+		<local-scheme>
+			<scheme-name>sample-backing-map</scheme-name>
+			<!-- Policy di espulsione dei dati-->
+			<eviction-policy>hybrid</eviction-policy>
+			<!-- Numero massimo di unità in cache-->
+			<high-units>{back-size-limit 0}</high-units>
+			<unit-calculator>binary</unit-calculator>
+			<!-- Tempo di scadenza degli oggetti -->
+			<expiry-delay>{back-expiry-delay 1h}</expiry-delay>
+		</local-scheme>
+	</caching-schemes>
+</cache-config>
